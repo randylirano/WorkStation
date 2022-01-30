@@ -5,7 +5,11 @@
 ```
 python3 -m venv ~/virtualenvs/workstation
 ```
-- Install the requirments
+- Activate the virtualenv
+```
+source ~/virtualenvs/workstation/bin/activate
+```
+- Install the requirements
 ```
 pip install -r requirements.txt
 ```
