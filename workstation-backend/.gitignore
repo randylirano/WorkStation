@@ -1,0 +1,4 @@
+**/__pycache__/
+
+# Prod secret keys
+workstation/.env

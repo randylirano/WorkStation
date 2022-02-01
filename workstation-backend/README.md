@@ -13,3 +13,18 @@ source ~/virtualenvs/workstation/bin/activate
 ```
 pip install -r requirements.txt
 ```
+- Create `workstation/.env` file for storing secret key locally.
+
+Follow the same structure as `workstation/.env-example`.
+
+**NEVER SAVE OR COMMIT ANY SECRET KEYS IN settings.py**
+
+All secrets should live in your `workstatuon/.env` file.
+
+## Updating `requirements.txt`
+
+If you install a new package or dependency through `pip install`, make sure to
+update the `requirements.txt` file with:
+```
+pip freeze > requirements.txt
+```
