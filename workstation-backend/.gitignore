@@ -5,3 +5,6 @@ db.sqlite3
 
 # Prod secret keys
 workstation/.env
+
+# Pytest
+.pytest_cache
