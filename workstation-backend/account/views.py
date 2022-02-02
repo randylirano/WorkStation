@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics, permissions, mixins
 from rest_framework.response import Response
 
-from .serializer import UserSerializer
+from .serializers import UserSerializer
 
 
 class RegisterView(generics.GenericAPIView):
@@ -16,13 +16,9 @@ class RegisterView(generics.GenericAPIView):
 
         return Response(
             {
-                "user": UserSerializer(
-                    user,
-                    context=self.get_serializer_context(),
-                ).data,
+                "username": user.username,
                 "message": (
-                    "User Created Successfully. "
-                    "Perform Login to get your token."
+                    "User Created Successfully. Perform Login to get your token."
                 ),
             }
         )
