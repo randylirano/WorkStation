@@ -8,6 +8,7 @@ class BaseComponent(models.Model):
     y = models.DecimalField(max_digits=100, decimal_places=2)
     width = models.DecimalField(max_digits=100, decimal_places=2)
     height = models.DecimalField(max_digits=100, decimal_places=2)
+    collapsed = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -16,7 +17,6 @@ class BaseComponent(models.Model):
 # Checklist component
 class Checklist(BaseComponent):
     title = models.CharField(max_length=200)
-    collapsed = models.BooleanField()
     color = models.CharField(max_length=10, default="#baaf13")
 
 
@@ -27,8 +27,7 @@ class ChecklistItem(models.Model):
 
 
 class PostIt(BaseComponent):
-    content = models.CharField(max_length=200)
-    collapsed = models.BooleanField()
+    content = models.TextField()
     color = models.CharField(max_length=10, default="#baaf13")
 
 
