@@ -30,4 +30,5 @@ urlpatterns = [
         name="token_refresh",
     ),
     path("account/", include("account.urls")),
+    path("workspace/", include("workspace.urls")),
 ]
