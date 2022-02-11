@@ -21,8 +21,7 @@ class RegisterView(generics.GenericAPIView):
                     context=self.get_serializer_context(),
                 ).data,
                 "message": (
-                    "User Created Successfully. "
-                    "Perform Login to get your token."
+                    "User Created Successfully. " "Perform Login to get your token."
                 ),
             }
         )

@@ -4,7 +4,7 @@ from .views import BackgroundView
 
 urlpatterns = [
     re_path(
-        r'^background/(?<workspace_id>\d+)?$',
+        r"^background/(?P<workspace_id>\d+)?$",
         BackgroundView.as_view(),
         name="workspace-background",
     ),
