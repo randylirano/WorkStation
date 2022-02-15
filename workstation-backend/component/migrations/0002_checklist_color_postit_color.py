@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('component', '0001_initial'),
+        ("component", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='checklist',
-            name='color',
-            field=models.CharField(default='#baaf13', max_length=10),
+            model_name="checklist",
+            name="color",
+            field=models.CharField(default="#baaf13", max_length=10),
         ),
         migrations.AddField(
-            model_name='postit',
-            name='color',
-            field=models.CharField(default='#baaf13', max_length=10),
+            model_name="postit",
+            name="color",
+            field=models.CharField(default="#baaf13", max_length=10),
         ),
     ]

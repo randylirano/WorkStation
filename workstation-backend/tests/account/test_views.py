@@ -17,7 +17,5 @@ def test_register(client):
     assert response.status_code == 200
     assert response.json() == {
         "username": "test_user",
-        "message": (
-            "User Created Successfully. Perform Login to get your token."
-        ),
+        "message": ("User Created Successfully. Perform Login to get your token."),
     }

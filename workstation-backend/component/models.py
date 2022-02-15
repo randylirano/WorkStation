@@ -3,7 +3,9 @@ from workspace import models as workspace_models
 
 # Create your models here.
 class BaseComponent(models.Model):
-    workspace_id = models.ForeignKey(workspace_models.Workspace, on_delete=models.CASCADE)
+    workspace_id = models.ForeignKey(
+        workspace_models.Workspace, on_delete=models.CASCADE
+    )
     x = models.DecimalField(max_digits=100, decimal_places=2)
     y = models.DecimalField(max_digits=100, decimal_places=2)
     width = models.DecimalField(max_digits=100, decimal_places=2)

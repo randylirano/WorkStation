@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('component', '0002_checklist_color_postit_color'),
+        ("component", "0002_checklist_color_postit_color"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='image',
-            name='collapsed',
+            model_name="image",
+            name="collapsed",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='checklist',
-            name='collapsed',
+            model_name="checklist",
+            name="collapsed",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='postit',
-            name='collapsed',
+            model_name="postit",
+            name="collapsed",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='postit',
-            name='content',
+            model_name="postit",
+            name="content",
             field=models.TextField(),
         ),
     ]
