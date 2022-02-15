@@ -7,7 +7,11 @@ from workspace.models import Background, Workspace
 
 @pytest.fixture
 def user_1():
-    return User.objects.create(username="test_user1")
+    return User.objects.create(
+        username="test_user1",
+        email="test",
+        password="test_password",
+    )
 
 
 @pytest.fixture
