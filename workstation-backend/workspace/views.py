@@ -5,8 +5,7 @@ from .models import Background, Workspace
 from .serializers import WorkspaceSerializer, BackgroundSerializer
 
 
-class WorkspaceView(mixins.CreateModelMixin, generics.GenericAPIView):
-    lookup_field = "user"
+class WorkspaceListView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Workspace.objects.all()
     serializer_class = WorkspaceSerializer
 
@@ -15,6 +14,21 @@ class WorkspaceView(mixins.CreateModelMixin, generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class WorkspaceDetailView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    lookup_field = "id"
+    queryset = Workspace.objects.all()
+    serializer_class = WorkspaceSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
 class BackgroundView(mixins.CreateModelMixin, generics.RetrieveUpdateAPIView):

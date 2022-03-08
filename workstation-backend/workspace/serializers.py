@@ -4,7 +4,7 @@ from .models import Background, Workspace
 
 
 class WorkspaceSerializer(serializers.ModelSerializer):
-    user = serializers.IntegerField()
+    user_id = serializers.IntegerField()
     name = serializers.CharField()
 
     class Meta:
