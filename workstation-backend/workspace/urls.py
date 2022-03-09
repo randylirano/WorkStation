@@ -4,12 +4,12 @@ from .views import BackgroundView, WorkspaceListView, WorkspaceDetailView
 
 urlpatterns = [
     re_path(
-        r"^workspace/",
+        r"^$",
         WorkspaceListView.as_view(),
         name="workspace-list",
     ),
     re_path(
-        r"^workspace/(?P<workspace_id>\d+)?$",
+        r"^(?P<workspace_id>\d+)?$",
         WorkspaceDetailView.as_view(),
         name="workspace-detail",
     ),
