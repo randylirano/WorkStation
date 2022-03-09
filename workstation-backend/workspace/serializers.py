@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from .models import Background
+from .models import Background, Workspace
+
+
+class WorkspaceSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField()
+    name = serializers.CharField()
+
+    class Meta:
+        model = Workspace
+        fields = ["id", "user", "name"]
 
 
 class BackgroundSerializer(serializers.ModelSerializer):
