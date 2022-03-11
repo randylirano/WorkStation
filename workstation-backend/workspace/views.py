@@ -5,7 +5,9 @@ from .models import Background, Workspace
 from .serializers import WorkspaceSerializer, BackgroundSerializer
 
 
-class WorkspaceListView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class WorkspaceListView(
+    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
+):
     queryset = Workspace.objects.all()
     serializer_class = WorkspaceSerializer
 
@@ -16,7 +18,12 @@ class WorkspaceListView(mixins.ListModelMixin, mixins.CreateModelMixin, generics
         return self.create(request, *args, **kwargs)
 
 
-class WorkspaceDetailView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+class WorkspaceDetailView(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
     lookup_field = "id"
     queryset = Workspace.objects.all()
     serializer_class = WorkspaceSerializer

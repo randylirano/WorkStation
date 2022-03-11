@@ -13,7 +13,7 @@ class WorkspaceSerializer(serializers.ModelSerializer):
 
 
 class BackgroundSerializer(serializers.ModelSerializer):
-    workspace_id = serializers.IntegerField()
+    workspace_id = serializers.UUIDField()
     image_url = serializers.URLField()
 
     def update(self, instance, validated_data):

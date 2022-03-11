@@ -31,4 +31,5 @@ urlpatterns = [
     ),
     path("account/", include("account.urls")),
     path("workspace/", include("workspace.urls")),
+    path("component/", include("component.urls")),
 ]

@@ -1,6 +1,8 @@
 import json
 import pytest
 
+from uuid import uuid4
+
 from django.urls import reverse
 from rest_framework import status
 
@@ -23,8 +25,8 @@ class TestBackground:
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == {
-            "id": background_1.id,
-            "workspace_id": background_1.workspace_id,
+            "id": str(background_1.id),
+            "workspace_id": str(background_1.workspace_id),
             "image_url": background_1.image_url,
         }
 
@@ -91,11 +93,13 @@ class TestBackground:
         workspace_id = background_1.workspace_id
         url = reverse("workspace-background", kwargs={"workspace_id": workspace_id})
 
+        new_uuid = uuid4()
+
         response = client.patch(
             url,
             data=json.dumps(
                 {
-                    "workspace_id": workspace_id + 1,
+                    "workspace_id": str(new_uuid),
                 }
             ),
             content_type="application/json",
