@@ -1,11 +1,12 @@
+from uuid import uuid4
+
 from django.db import models
 from workspace import models as workspace_models
 
 # Create your models here.
 class BaseComponent(models.Model):
-    workspace_id = models.ForeignKey(
-        workspace_models.Workspace, on_delete=models.CASCADE
-    )
+    id = models.UUIDField(primary_key=True, default=uuid4)
+    workspace = models.ForeignKey(workspace_models.Workspace, on_delete=models.CASCADE)
     x = models.DecimalField(max_digits=100, decimal_places=2)
     y = models.DecimalField(max_digits=100, decimal_places=2)
     width = models.DecimalField(max_digits=100, decimal_places=2)
@@ -29,6 +30,7 @@ class ChecklistItem(models.Model):
 
 
 class PostIt(BaseComponent):
+    title = models.CharField(max_length=200)
     content = models.TextField()
     color = models.CharField(max_length=10, default="#baaf13")
 

@@ -1,7 +1,10 @@
 import pytest
 
+from decimal import Decimal
+
 from django.contrib.auth.models import User
 
+from component.models import PostIt
 from workspace.models import Background, Workspace
 
 
@@ -23,7 +26,48 @@ def workspace_1(user_1):
 
 
 @pytest.fixture
+def workspace_2(user_1):
+    return Workspace.objects.create(
+        user=user_1,
+        name="Sample Workspace #2",
+    )
+
+
+@pytest.fixture
 def background_1(workspace_1):
     return Background.objects.create(
         workspace=workspace_1, image_url="http://sample_url.com"
+    )
+
+
+@pytest.fixture
+def post_it_1(workspace_1):
+    return PostIt.objects.create(
+        workspace=workspace_1,
+        x=Decimal("1.23"),
+        y=Decimal("4"),
+        width=Decimal("56"),
+        height=Decimal("7"),
+        collapsed=False,
+        title="Hello world",
+        content=(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
+            "eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        ),
+        color="#baaf10",
+    )
+
+
+@pytest.fixture
+def post_it_2(workspace_2):
+    return PostIt.objects.create(
+        workspace=workspace_2,
+        x=Decimal("3.21"),
+        y=Decimal("4"),
+        width=Decimal("65"),
+        height=Decimal("7"),
+        collapsed=True,
+        title="World Hello",
+        content="incididunt ut labore et dolore magna aliqua.",
+        color="#aaaf10",
     )
