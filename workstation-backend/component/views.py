@@ -9,23 +9,14 @@ class PostItListView(generics.ListCreateAPIView):
     serializer_class = PostItSerializer
 
     def get_queryset(self):
-        workspace_id = self.kwargs.get("workspace_id")
-        return PostIt.objects.filter(workspace_id=workspace_id)
+        workspace_id = self.request.query_params.get("workspace_id")
+        if workspace_id is not None:
+            return PostIt.objects.filter(workspace_id=workspace_id)
+        else:
+            return PostIt.objects.all()
 
 
 class PostItDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "id"
     queryset = PostIt.objects.all()
     serializer_class = PostItSerializer
-
-    def get_object(self):
-        qs = self.get_queryset()
-
-        workspace_id = self.kwargs.get("workspace_id")
-        id = self.kwargs.get("id")
-
-        return get_object_or_404(
-            qs.filter(
-                id=id,
-                workspace_id=workspace_id,
-            )
-        )

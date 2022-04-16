@@ -5,25 +5,18 @@ from workspace.models import Workspace
 
 
 class BaseComponentSerializer(serializers.ModelSerializer):
-    workspace_id = serializers.UUIDField(
-        source="workspace.id",
-        read_only=True,
-    )
+    workspace_id = serializers.UUIDField()
 
     def create(self, validated_data):
-        workspace_id = self.context["view"].kwargs.get("workspace_id")
-
-        if workspace_id is None:
-            raise serializers.ValidationError({"workspace_id": "Must not be null."})
+        workspace_id = validated_data.get("workspace_id")
 
         # Check that the workspace exists.
         # TODO: when we add authentication, check that the workspace belongs to the user
-        if not Workspace.objects.filter(id=workspace_id).exists():
+        if workspace_id is None or not Workspace.objects.filter(id=workspace_id).exists():
             raise serializers.ValidationError(
                 {"workspace_id": "Workspace doesn't exist"}
             )
 
-        validated_data["workspace_id"] = workspace_id
         return super().create(validated_data)
 
     class Meta:
