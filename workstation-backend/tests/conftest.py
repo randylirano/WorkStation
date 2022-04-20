@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User
 
-from component.models import PostIt
+from component.models import PostIt, Image
 from workspace.models import Background, Workspace
 
 
@@ -70,4 +70,11 @@ def post_it_2(workspace_2):
         title="World Hello",
         content="incididunt ut labore et dolore magna aliqua.",
         color="#aaaf10",
+    )
+
+
+@pytest.fixture
+def image_1(workspace_1):
+    return Image.objects.create(
+        workspace=workspace_1
     )
