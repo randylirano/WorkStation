@@ -26,37 +26,43 @@ class BaseTestPostIt:
 
 @pytest.mark.django_db
 class TestPostitList(BaseTestPostIt):
-    def test_get_not_found(self, client):
-        url = reverse("post-it-list", kwargs={"workspace_id": uuid4()})
+    url = reverse("post-it-list")
 
-        response = client.get(url)
+    def test_get_not_found(self, client):
+        # No post it in the DB, should return empty list
+        response = client.get(self.url)
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == []
 
-    def test_get(self, client, post_it_1, post_it_2):
-        url = reverse("post-it-list", kwargs={"workspace_id": post_it_1.workspace.id})
-
-        response = client.get(url)
+        response = client.get(self.url, {"workspace_id": uuid4()})
         assert response.status_code == status.HTTP_200_OK
+        assert response.json() == []
 
+    def test_get_with_workspace_id(self, client, post_it_1, post_it_2):
+        # Get without workspace ID should return both post-its
+        response = client.get(self.url)
+        assert response.status_code == status.HTTP_200_OK
+        result = response.json()
+        assert len(result) == 2
+        result_ids = set(r["id"] for r in result)
+        assert result_ids == set([str(post_it_1.id), str(post_it_2.id)])
+
+        # Get with workspace ID should only return post it in that workspace
+        response = client.get(self.url, {"workspace_id": post_it_1.workspace.id})
+        assert response.status_code == status.HTTP_200_OK
         result = response.json()
         assert len(result) == 1
         self._assert_result(result[0], post_it_1)
 
-        url = reverse("post-it-list", kwargs={"workspace_id": post_it_2.workspace.id})
-
-        response = client.get(url)
+        response = client.get(self.url, {"workspace_id": post_it_2.workspace.id})
         assert response.status_code == status.HTTP_200_OK
-
         result = response.json()
         assert len(result) == 1
         self._assert_result(result[0], post_it_2)
 
     def test_post(self, client, workspace_1):
-        url = reverse("post-it-list", kwargs={"workspace_id": workspace_1.id})
-
         response = client.post(
-            url,
+            self.url,
             data={
                 "title": "New Post",
                 "content": "Sample content",
@@ -64,9 +70,11 @@ class TestPostitList(BaseTestPostIt):
                 "y": -100,
                 "width": 20.25,
                 "height": 52.02,
+                "workspace_id": workspace_1.id
             },
         )
 
+        print(response.data)
         assert response.status_code == status.HTTP_201_CREATED
 
         post_it = PostIt.objects.get()
@@ -81,10 +89,9 @@ class TestPostitList(BaseTestPostIt):
         assert post_it.workspace == workspace_1
 
     def test_post_invalid_workspace(self, client, workspace_1):
-        url = reverse("post-it-list", kwargs={"workspace_id": uuid4()})
-
+        # Try to post without workspace ID
         response = client.post(
-            url,
+            self.url,
             data={
                 "title": "New Post",
                 "content": "Sample content",
@@ -92,6 +99,22 @@ class TestPostitList(BaseTestPostIt):
                 "y": -100,
                 "width": 20.25,
                 "height": 52.02,
+            },
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        # Try to post without invalid workspace ID
+        response = client.post(
+            self.url,
+            data={
+                "title": "New Post",
+                "content": "Sample content",
+                "x": 0,
+                "y": -100,
+                "width": 20.25,
+                "height": 52.02,
+                "workspace_id": uuid4()
             },
         )
 
@@ -105,7 +128,6 @@ class TestPostitDetail(BaseTestPostIt):
         url = reverse(
             "post-it-detail",
             kwargs={
-                "workspace_id": workspace_1.id,
                 "id": uuid4(),
             },
         )
@@ -116,8 +138,7 @@ class TestPostitDetail(BaseTestPostIt):
         url = reverse(
             "post-it-detail",
             kwargs={
-                "workspace_id": workspace_1.id,
-                "id": post_it_2.id,
+                "id": workspace_1.id,
             },
         )
 
@@ -128,7 +149,6 @@ class TestPostitDetail(BaseTestPostIt):
         url = reverse(
             "post-it-detail",
             kwargs={
-                "workspace_id": post_it_1.workspace_id,
                 "id": post_it_1.id,
             },
         )
@@ -143,7 +163,6 @@ class TestPostitDetail(BaseTestPostIt):
         url = reverse(
             "post-it-detail",
             kwargs={
-                "workspace_id": post_it_1.workspace_id,
                 "id": post_it_1.id,
             },
         )
@@ -174,7 +193,6 @@ class TestPostitDetail(BaseTestPostIt):
         url = reverse(
             "post-it-detail",
             kwargs={
-                "workspace_id": post_it_1.workspace_id,
                 "id": post_it_1.id,
             },
         )
@@ -195,8 +213,7 @@ class TestPostitDetail(BaseTestPostIt):
         result = response.json()
 
         self._assert_result(result, post_it_1)
-        # Workspace should not change
-        assert post_it_1.workspace == workspace_1
+        assert post_it_1.workspace == workspace_2
 
     def test_delete(self, client, post_it_1):
         post_id = post_it_1.id
@@ -205,7 +222,6 @@ class TestPostitDetail(BaseTestPostIt):
         url = reverse(
             "post-it-detail",
             kwargs={
-                "workspace_id": post_it_1.workspace_id,
                 "id": post_id,
             },
         )
@@ -216,21 +232,3 @@ class TestPostitDetail(BaseTestPostIt):
 
         assert not PostIt.objects.filter(id=post_id).exists()
         assert PostIt.objects.count() == 0
-
-    def test_delete_mismatch_id(self, client, post_it_1, workspace_2):
-        post_id = post_it_1.id
-        assert PostIt.objects.count() == 1
-
-        url = reverse(
-            "post-it-detail",
-            kwargs={
-                "workspace_id": workspace_2.id,
-                "id": post_id,
-            },
-        )
-
-        response = client.delete(url)
-
-        assert response.status_code == status.HTTP_404_NOT_FOUND
-
-        assert PostIt.objects.count() == 1

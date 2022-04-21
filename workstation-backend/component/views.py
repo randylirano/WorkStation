@@ -10,26 +10,17 @@ class PostItListView(generics.ListCreateAPIView):
     serializer_class = PostItSerializer
 
     def get_queryset(self):
-        workspace_id = self.kwargs.get("workspace_id")
-        return PostIt.objects.filter(workspace_id=workspace_id)
+        workspace_id = self.request.query_params.get("workspace_id")
+        if workspace_id is not None:
+            return PostIt.objects.filter(workspace_id=workspace_id)
+        else:
+            return PostIt.objects.all()
 
 
 class PostItDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "id"
     queryset = PostIt.objects.all()
     serializer_class = PostItSerializer
-
-    def get_object(self):
-        qs = self.get_queryset()
-
-        workspace_id = self.kwargs.get("workspace_id")
-        id = self.kwargs.get("id")
-
-        return get_object_or_404(
-            qs.filter(
-                id=id,
-                workspace_id=workspace_id,
-            )
-        )
 
 
 # Checklist list and detail views
@@ -37,26 +28,17 @@ class ChecklistListView(generics.ListCreateAPIView):
     serializer_class = ChecklistSerializer
 
     def get_queryset(self):
-        workspace_id = self.kwargs.get("workspace_id")
-        return Checklist.objects.filter(workspace_id=workspace_id)
+        workspace_id = self.request.query_params.get("workspace_id")
+        if workspace_id is not None:
+            return Checklist.objects.filter(workspace_id=workspace_id)
+        else:
+            return Checklist.objects.all()
 
 
 class ChecklistDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "id"
     queryset = Checklist.objects.all()
     serializer_class = ChecklistSerializer
-
-    def get_object(self):
-        qs = self.get_queryset()
-
-        workspace_id = self.kwargs.get("workspace_id")
-        id = self.kwargs.get("id")
-
-        return get_object_or_404(
-            qs.filter(
-                id=id,
-                workspace_id=workspace_id,
-            )
-        )
 
 
 # Checklist Item list and detail views
@@ -64,26 +46,17 @@ class ChecklistItemListView(generics.ListCreateAPIView):
     serializer_class = ChecklistItemSerializer
 
     def get_queryset(self):
-        checklist_id = self.kwargs.get("checklist_id")
-        return ChecklistItem.objects.filter(checklist_id=checklist_id)
+        checklist_id = self.request.query_params.get("checklist_id")
+        if checklist_id is not None:
+            return ChecklistItem.objects.filter(checklist_id=checklist_id)
+        else:
+            return ChecklistItem.objects.all()
 
 
 class ChecklistItemDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "id"
     queryset = ChecklistItem.objects.all()
     serializer_class = ChecklistItemSerializer
-
-    def get_object(self):
-        qs = self.get_queryset
-
-        checklist_id = self.kwargs.get("checklist_id")
-        id = self.kwargs.get("id")
-
-        return get_object_or_404(
-            qs.filter(
-                id=id,
-                checklist_id=checklist_id,
-            )
-        )
 
 
 # Image list and detail views
@@ -91,23 +64,14 @@ class ImageListView(generics.ListCreateAPIView):
     serializer_class = ImageSerializer
 
     def get_queryset(self):
-        workspace_id = self.kwargs.get("workspace_id")
-        return Image.objects.filter(workspace_id=workspace_id)
+        workspace_id = self.request.query_params.get("workspace_id")
+        if workspace_id is not None:
+            return Image.objects.filter(workspace_id=workspace_id)
+        else:
+            return Image.objects.all()
 
 
 class ImageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "id"
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
-
-    def get_object(self):
-        qs = self.get_queryset()
-
-        workspace_id = self.kwargs.get("workspace_id")
-        id = self.kwargs.get("id")
-
-        return get_object_or_404(
-            qs.filter(
-                id=id,
-                workspace_id=workspace_id,
-            )
-        )
