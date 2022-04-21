@@ -1,6 +1,15 @@
 from django.urls import re_path
 
-from .views import PostItDetailView, PostItListView, ChecklistListView, ChecklistDetailView, ChecklistItemListView, ChecklistItemDetailView, ImageListView, ImageDetailView
+from .views import (
+    PostItDetailView,
+    PostItListView,
+    ChecklistListView,
+    ChecklistDetailView,
+    ChecklistItemListView,
+    ChecklistItemDetailView,
+    ImageListView,
+    ImageDetailView,
+)
 
 urlpatterns = [
     re_path(
@@ -26,21 +35,15 @@ urlpatterns = [
     re_path(
         r"^checklist/item/(?P<checklist_id>[0-9a-f\-]+)?$",
         ChecklistItemListView.as_view(),
-        name="checklist-item-list"
+        name="checklist-item-list",
     ),
     re_path(
         r"^checklist/item/(?P<id>[0-9a-f\-]+)?$",
         ChecklistItemDetailView.as_view(),
-        name="checklist-item-detail"
+        name="checklist-item-detail",
     ),
+    re_path(r"image/$", ImageListView.as_view(), name="image-list"),
     re_path(
-        r"image/$",
-        ImageListView.as_view(),
-        name="image-list"
+        r"image/(?P<id>[0-9a-f\-]+)?/$", ImageDetailView.as_view(), name="image-detail"
     ),
-    re_path(
-        r"image/(?P<id>[0-9a-f\-]+)?/$",
-        ImageDetailView.as_view(),
-        name="image-detail"
-    )
 ]

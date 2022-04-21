@@ -2,7 +2,12 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
 from .models import PostIt, Checklist, ChecklistItem, Image
-from .serializers import PostItSerializer, ChecklistSerializer, ChecklistItemSerializer, ImageSerializer
+from .serializers import (
+    PostItSerializer,
+    ChecklistSerializer,
+    ChecklistItemSerializer,
+    ImageSerializer,
+)
 
 
 # Post-it list and detail views

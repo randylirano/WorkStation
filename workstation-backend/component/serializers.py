@@ -13,7 +13,10 @@ class BaseComponentSerializer(serializers.ModelSerializer):
 
         # Check that the workspace exists.
         # TODO: when we add authentication, check that the workspace belongs to the user
-        if workspace_id is None or not Workspace.objects.filter(id=workspace_id).exists():
+        if (
+            workspace_id is None
+            or not Workspace.objects.filter(id=workspace_id).exists()
+        ):
             raise serializers.ValidationError(
                 {"workspace_id": "Workspace doesn't exist"}
             )
@@ -37,7 +40,12 @@ class BaseComponentSerializer(serializers.ModelSerializer):
 class PostItSerializer(BaseComponentSerializer):
     class Meta:
         model = PostIt
-        fields = BaseComponentSerializer.Meta.fields + ["title", "content", "color", "collapsed"]
+        fields = BaseComponentSerializer.Meta.fields + [
+            "title",
+            "content",
+            "color",
+            "collapsed",
+        ]
 
 
 # Checklist serializer
