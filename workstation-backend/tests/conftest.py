@@ -73,6 +73,8 @@ def post_it_2(workspace_2):
     )
 
 
+# prepare 2 image for each work space
+# image 1 and 2 is for workspace 1
 @pytest.fixture
 def image_1(workspace_1):
     return Image.objects.create(
@@ -86,10 +88,35 @@ def image_1(workspace_1):
 
 
 @pytest.fixture
-def image_2(workspace_2):
+def image_2(workspace_1):
+    return Image.objects.create(
+        workspace=workspace_1,
+        x=Decimal("5.0"),
+        y=Decimal("4.0"),
+        width=Decimal("3.0"),
+        height=Decimal("3.0"),
+        url="https://drive.google.com/file/d/1gBEz1xudWrx9YTWJUH1nldIP8WOP6nAL/view?usp=sharing"
+    )
+
+
+# image 3 and 4 is for workspace 2
+@pytest.fixture
+def image_3(workspace_2):
     return Image.objects.create(
         workspace=workspace_2,
         x=Decimal("1.5"),
+        y=Decimal("4.0"),
+        width=Decimal("3.0"),
+        height=Decimal("3.0"),
+        url="https://drive.google.com/file/d/1isn9sfa0He-YcxeJDzwsJz_6uGklH3ES/view?usp=sharing"
+    )
+
+
+@pytest.fixture
+def image_4(workspace_2):
+    return Image.objects.create(
+        workspace=workspace_2,
+        x=Decimal("5.0"),
         y=Decimal("4.0"),
         width=Decimal("3.0"),
         height=Decimal("3.0"),

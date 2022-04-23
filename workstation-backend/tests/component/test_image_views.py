@@ -38,9 +38,17 @@ class TestImageList(BaseTestImage):
         assert response.json() == []
 
 
-    def test_get_valid_workspace_id(self, client, workspace_1, image_1):
-        response = client.get(self.url, {"workspace_id":workspace_1.id})
-        assert response.status_code == status.HTTP_200_OK
-        result = response.json()
-        assert len(result) == 1
-        self._assert_result(result[0], image_1)
+    def test_get_valid_workspace_id(self, client, workspace_1, workspace_2, image_1, image_2, image_3, image_4):
+        response_1 = client.get(self.url, {"workspace_id":workspace_1.id})
+        assert response_1.status_code == status.HTTP_200_OK
+        result_1 = response_1.json()
+        assert len(result_1) == 2
+        self._assert_result(result_1[0], image_1)
+        self._assert_result(result_1[1], image_2)
+
+        response_2 = client.get(self.url, {"workspace_id":workspace_2.id})
+        assert response_2.status_code == status.HTTP_200_OK
+        result_2 = response_2.json()
+        assert len(result_2) == 2
+        self._assert_result(result_2[0], image_3)
+        self._assert_result(result_2[1], image_4)
