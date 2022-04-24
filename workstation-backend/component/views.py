@@ -73,7 +73,7 @@ class ImageListView(generics.ListCreateAPIView):
         if workspace_id is not None:
             return Image.objects.filter(workspace_id=workspace_id)
         else:
-            return []
+            return Image.objects.all()
 
 
 class ImageDetailView(generics.RetrieveUpdateDestroyAPIView):
