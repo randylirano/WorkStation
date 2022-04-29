@@ -34,6 +34,14 @@ def workspace_2(user_1):
 
 
 @pytest.fixture
+def workspace_3(user_1):
+    return Workspace.objects.create(
+        user=user_1,
+        name="Sample Workspace #3",
+    )
+
+
+@pytest.fixture
 def background_1(workspace_1):
     return Background.objects.create(
         workspace=workspace_1, image_url="http://sample_url.com"
