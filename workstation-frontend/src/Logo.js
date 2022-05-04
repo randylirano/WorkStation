@@ -1,19 +1,30 @@
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+
+import { Link } from 'react-router-dom';
+
 import logo from './img/logo.svg';
 
-import Box from '@mui/material/Box';
 
-
-function Logo() {
+function Logo({
+    clickable
+}) {
     return (
-        <Box
-            component='img'
-            sx={{
-              height: 50,
-              width: 50,
-            }}
-            alt='Logo'
-            src={logo}
-          />
+        <Button
+            component={Link}
+            to={'/'}
+            disabled={!clickable}
+        >
+            <Box
+                component='img'
+                sx={{
+                  height: 50,
+                  width: 50,
+                }}
+                alt='Logo'
+                src={logo}
+              />
+        </Button>
   );
 }
 

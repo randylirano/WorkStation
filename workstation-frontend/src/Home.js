@@ -1,15 +1,14 @@
-import logo from './img/logo.svg';
-
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { Link } from 'react-router-dom';
 
 import CenterComponent from './CenterComponent';
 import Logo from './Logo';
-import WorkstationBox from './WorkstationBox';
+import NewWorkstationBox from './NewWorkstationBox';
+import ExistingWorkstationBox from './ExistingWorkstationBox';
 
 
 function Home() {
@@ -40,8 +39,18 @@ function Home() {
             <Grid
                 item
                 spacing={2}
+                direction='column'
+                sx={{
+                    alignSelf: 'center'
+                }}
             >
-                <WorkstationBox/>
+                <Stack
+                    direction='row'
+                    spacing={2}
+                >
+                    <ExistingWorkstationBox/>
+                    <NewWorkstationBox/>
+                </Stack>
             </Grid>
         </CenterComponent>
   );

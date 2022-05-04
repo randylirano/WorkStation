@@ -11,7 +11,7 @@ import CenterComponent from './CenterComponent';
 import Logo from './Logo';
 
 
-function Login() {
+function EditableTypography() {
     return (
         <CenterComponent>
             <Box
@@ -27,7 +27,7 @@ function Login() {
                         width: 'fit-content'
                     }}
                 >
-                    Login
+                    Register
                 </Typography>
                 <Grid
                     item
@@ -60,14 +60,28 @@ function Login() {
                           }}
                         />
                         <TextField
+                          label='Email'
+                          type='email'
+                          style={{
+                              backgroundColor: 'white',
+                          }}
+                        />
+                        <TextField
                           label='Password'
                           type='password'
                           style={{
                               backgroundColor: 'white',
                           }}
                         />
+                        <TextField
+                          label='Confirm Password'
+                          type='password'
+                          style={{
+                              backgroundColor: 'white',
+                          }}
+                        />
                         <Button variant='contained' >
-                            Login
+                            Register
                         </Button>
                     </Stack>
                 </Grid>
@@ -76,4 +90,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default EditableTypography;
