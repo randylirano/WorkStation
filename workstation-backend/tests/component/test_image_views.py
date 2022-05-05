@@ -46,6 +46,8 @@ class TestImageList(BaseTestImage):
     def test_get_found(self, client, workspace_1, workspace_2, workspace_3, image_1, image_2, image_3, image_4):
         """
         Test get on valid workspace id.
+        Use pre-defined test fixtures.
+        Workspace 1 and 2 has 2 images each, and workspace 3 is empty.
         """
         # workspace id not provided ==> [all current user's images]
         response = client.get(self.url)
@@ -76,7 +78,11 @@ class TestImageList(BaseTestImage):
         assert len(result_3) == 0
 
 
-    def test_post_invalid_workspace(self, client, workspace_1):
+    def test_post_invalid_workspace(self, client):
+        """
+        Test post on invalid workspace.
+        No test fixture was provided.
+        """
         # post without workspace id ==> no image created, receive a code HTTP_400_BAD_REQUEST
         response_0 = client.post(
             self.url,
@@ -108,51 +114,13 @@ class TestImageList(BaseTestImage):
         assert response_1.data == {"workspace_id": "Workspace doesn't exist"}
 
 
-    # def test_post(self, client, workspace_1, workspace_2, image_1, image_3):
-    #     # confirm both workspace_1 and workspace_2 starts with one image each
-    #     response_1 = client.get(self.url, {"workspace_id":workspace_1.id})
-    #     assert response_1.status_code == status.HTTP_200_OK
-    #     result_1 = response_1.json()
-    #     assert len(result_1) == 1
-    #     response_2 = client.get(self.url, {"workspace_id":workspace_2.id})
-    #     assert response_2.status_code == status.HTTP_200_OK
-    #     result_2 = response_2.json()
-    #     assert len(result_2) == 1
-    #
-    #     response = client.post(
-    #         self.url,
-    #         data={
-    #             "workspace_id": workspace_1.id,
-    #             "x": 0.0,
-    #             "y": -100.0,
-    #             "width": 3.0,
-    #             "height": 3.0,
-    #             "url": "https://drive.google.com/file/d/1isn9sfa0He-YcxeJDzwsJz_6uGklH3ES/view?usp=sharing",
-    #         },
-    #     )
-    #
-    #     assert response.status_code == status.HTTP_201_CREATED
-    #
-    #     response_1 = client.get(self.url, {"workspace_id":workspace_1.id})
-    #     assert response_1.status_code == status.HTTP_200_OK
-    #     result_1 = response_1.json()
-    #     assert len(result_1) == 2
-    #     response_2 = client.get(self.url, {"workspace_id":workspace_2.id})
-    #     assert response_2.status_code == status.HTTP_200_OK
-    #     result_2 = response_2.json()
-    #     assert len(result_2) == 1
-    #
-    #     image = Image.objects.get(y=-100.0)
-    #     assert image.workspace == workspace_1
-    #     assert image.x == Decimal("0.0")
-    #     assert image.y == Decimal("-100.0")
-    #     assert image.width == Decimal("3.0")
-    #     assert image.height == Decimal("3.0")
-    #     assert image.url == "https://drive.google.com/file/d/1isn9sfa0He-YcxeJDzwsJz_6uGklH3ES/view?usp=sharing"
-
-    # test post to valid workspace with VALID payload
     def test_post_valid_workspace(self, client, workspace_1):
+        """
+        Test on valid workspace id.
+        Using pre-defined workspace fixture, workspace_1.
+        """
 
+        # several valid and invalid image payloads
         # dog 1 image
         valid_payload_1 = {
             "workspace_id": workspace_1.id,
@@ -181,9 +149,10 @@ class TestImageList(BaseTestImage):
             "height": 3.0,
         }
 
+        # test post valid payload
         response = client.post(
             self.url,
-            data=valid_payload,
+            data=valid_payload_1,
         )
 
         assert response.status_code == status.HTTP_201_CREATED
@@ -199,6 +168,27 @@ class TestImageList(BaseTestImage):
         assert Decimal(image["height"]) == Decimal("3.0")
         assert image["url"] == "https://drive.google.com/file/d/1isn9sfa0He-YcxeJDzwsJz_6uGklH3ES/view?usp=sharing"
 
+        # test post different valid payload into the same workspace
+        response = client.post(
+            self.url,
+            data=valid_payload_2,
+        )
+        response = client.get(self.url, {"workspace_id":workspace_1.id})
+        result = response.json()
+        assert len(result) == 2
+
+        # at this point, image of dog 1 and 2 should be in workspace 1
+        # try posting image of dog 1 again to workspace 1, this will create duplicate image url condition
+        # this should still allows an input
+        response = client.post(
+            self.url,
+            data=valid_payload_1,
+        )
+        response = client.get(self.url, {"workspace_id":workspace_1.id})
+        result = response.json()
+        assert len(result) == 3
+
+        # test post an invalid payload
         response = client.post(
             self.url,
             data=invalid_payload,
@@ -207,5 +197,3 @@ class TestImageList(BaseTestImage):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "url" in response.data
         assert "x" in response.data
-
-    # test post to valid workspace with INVALID payload
