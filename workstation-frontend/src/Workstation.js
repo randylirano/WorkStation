@@ -26,7 +26,6 @@ function Workstation() {
     const [componentList, setComponentList] = useState([]);
 
     const removeComponent = (key) => () => {
-        console.log(componentList)
         const newList = componentList.filter((item) => item.key !== key);
         setComponentList(newList);
     };
@@ -39,7 +38,6 @@ function Workstation() {
                 onClose={removeComponent(key)}
             />
         ));
-    };
 
     return (
         <div>
