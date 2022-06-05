@@ -197,8 +197,3 @@ class TestImageList(BaseTestImage):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "url" in response.data
         assert "x" in response.data
-
-
-@pytest.mark.django_db
-class TestImageDetail(BaseTestImage):
-    url = reverse("image-detail")
